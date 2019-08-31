@@ -16,5 +16,8 @@
     "url": "https://github.com/Peperman66/QuantumBot/issues"
   },
   "homepage": "https://github.com/Peperman66/QuantumBot#readme",
-  "devDependencies": {}
+  "devDependencies": {},
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  }
 }
