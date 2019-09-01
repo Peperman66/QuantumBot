@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Peperman66/QuantumBot#readme",
   "devDependencies": {},
   "dependencies": {
-    "discord.js": "^11.5.1"
+    "discord.js": "^11.5.1",
+    "dotenv": "^8.1.0"
   }
 }
