@@ -15,7 +15,7 @@ module.exports.run = async (bot, message, args) => {
     let question = args.join(' ');
     let embed = new Discord.RichEmbed()
         .setTitle("Nová anketa!")
-        .setColor(0x00ffff)
+        .setColor(config.embeds.infoColor)
         .setDescription(question)
         .setFooter(`0/${userCount} hlasovalo`)
         .setTimestamp(new Date());

@@ -1,4 +1,9 @@
 {
     "prefix": ",",
-    "commandDirectory": "./commands"
+    "commandDirectory": "./commands",
+    "embeds": {
+        "infoColor": "#00ffff",
+        "safeColor": "#00ff00",
+        "mediumColor": "#ff8000"
+    }
 }
