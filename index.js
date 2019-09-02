@@ -2,6 +2,7 @@ require('dotenv').config();
 const Discord = require("discord.js");
 const config = require('./config.json');
 const fs = require('fs');
+const http = require('http');
 const bot = new Discord.Client({ disableEveryone: true });
 
 bot.commands = new Discord.Collection();
@@ -38,3 +39,10 @@ bot.on('message', async message => {
 bot.on('error', async error => console.log(error));
 
 bot.login(process.env.TOKEN);
+
+const server = http.createServer((req, res) => {
+    if (req.url === '/'){
+        res.writeHead(200);
+        res.end();
+    }
+}).listen(80);
