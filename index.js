@@ -7,7 +7,8 @@ const http = require('http');
 const bot = new Commando.Client({
     commandPrefix: ',',
     owner: '272106575127117824',
-    disableEveryone: true
+    disableEveryone: true,
+    nonCommandEditable: false
 });
 
 bot.registry
