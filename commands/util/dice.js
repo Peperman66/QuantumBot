@@ -1,7 +1,33 @@
+const Commando = require("discord.js-commando");
 const Discord = require("discord.js");
 
+module.exports = class ReplyCommand extends Commando.Command {
+    constructor(client) {
+        super(client, {
+            name: 'dice',
+            group: 'util',
+            memberName: 'dice',
+            description: 'Rolls a dice',
+            examples: ['2D6', 'D4+3', '2D6+3 2'],
+            args: [{
+                key: 'dieCode',
+                label: 'dieCode',
+                default: 'D6',
+                prompt: 'Proper usage: `[number of dice]D[sides of dice]±[additive constant] [number of dice rolls]` like `2D6+3 2`',
+                type: 'string'
+            }]
+        });
+    }
+
+    run(message, {dieCode}) {
+        roll(message, dieCode);
+    }
+}
+
+
 module.exports.run = (bot, message, args) => roll(bot, message, args);
-const roll = (bot, message, args) => {
+const roll = (message, dieCode) => {
+    const args = dieCode.split(' ');
     if (args.lenght > 2) {
         return message.channel.send("Incorect number of arguments.");
     } else if (args.length == 0) {

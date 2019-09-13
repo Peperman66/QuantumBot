@@ -1,11 +1,31 @@
 require('dotenv').config();
-const Discord = require("discord.js");
+const Commando = require("discord.js-commando");
 const config = require('./config.json');
 const fs = require('fs');
+const path = require('path');
 const http = require('http');
-const bot = new Discord.Client({ disableEveryone: true });
+const bot = new Commando.Client({
+    commandPrefix: ',',
+    owner: '272106575127117824',
+    disableEveryone: true
+});
 
-bot.commands = new Discord.Collection();
+bot.registry
+    // Registers your custom command groups
+    .registerGroups([
+        ['fll', 'FLL related commands'],
+        //['lego', 'Lego related commands'],
+        ['fun', 'Fun commands'],
+        ['util', 'Useful commands']
+    ])
+
+    // Registers all built-in groups, commands, and argument types
+    .registerDefaults()
+
+    // Registers all of your commands in the ./commands/ directory
+    .registerCommandsIn(path.join(__dirname, config.commandDirectory));
+
+/*bot.commands = new Discord.Collection();
 
 fs.readdir(config.commandDirectory, (err, files) => {
     if (err) return console.log(err);
@@ -35,7 +55,7 @@ bot.on('message', async message => {
             .catch((err) => console.log(err));
     }
 });
-
+*/
 bot.on('error', async error => console.log(error));
 
 bot.login(process.env.TOKEN);

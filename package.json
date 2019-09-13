@@ -19,6 +19,7 @@
   "devDependencies": {},
   "dependencies": {
     "discord.js": "^11.5.1",
+    "discord.js-commando": "^0.10.0",
     "dotenv": "^8.1.0",
     "ms": "^2.1.2"
   }
