@@ -9,7 +9,7 @@ module.exports = class ReplyCommand extends Commando.Command {
             name: 'anketa',
             group: 'fll',
             memberName: 'anketa',
-            description: 'Creates a poll',
+            description: 'Creates a poll. Please note: this command is under development',
             examples: ['anketa Do you like cats?'],
             args: [{
                     key: 'question',
@@ -26,7 +26,7 @@ module.exports = class ReplyCommand extends Commando.Command {
         const no = '👎';
         const users = message.guild.members;
         const availableUsers = users.filter(u => message.channel.memberPermissions(u).has('VIEW_CHANNEL', false))
-        let userCount = availableUsers.filter(u => !u.user.bot).size - 1;
+        const userCount = availableUsers.filter(u => !u.user.bot).size;
         let embed = new Discord.RichEmbed()
             .setTitle("Nová anketa!")
             .setColor(config.embeds.infoColor)
@@ -40,7 +40,7 @@ module.exports = class ReplyCommand extends Commando.Command {
 
         let yescount = 0;
         let nocount = 0;
-        let usersData = { users: [{ userId: message.author.id, vote: null }] };
+        let usersData = { users: [] };
 
         collector.on('collect', (reaction, reactionCollector) => {
             console.log(`Collected ${reaction.emoji.name}`);
@@ -53,7 +53,7 @@ module.exports = class ReplyCommand extends Commando.Command {
                     }
                     usersData.users.push(userData);
                     reaction.users.last().send(`V anketě \`\`${question}\`\` jsi hlasoval pro ano.`);
-                    embed.setFooter(`${usersData.users.length - 1}/${userCount} hlasovalo`).setTimestamp(new Date());
+                    embed.setFooter(`${usersData.users.length}/${userCount} hlasovalo`).setTimestamp(new Date());
                     questionMessage.edit(embed);
                 } else if (reaction.emoji == no) {
                     nocount++;
@@ -63,31 +63,27 @@ module.exports = class ReplyCommand extends Commando.Command {
                     }
                     usersData.users.push(userData);
                     reaction.users.last().send(`V anketě \`\`${question}\`\` jsi hlasoval pro ne.`);
-                    embed.setFooter(`${usersData.users.length - 1}/${userCount} hlasovalo`).setTimestamp(new Date());
+                    embed.setFooter(`${usersData.users.length}/${userCount} hlasovalo`).setTimestamp(new Date());
                     questionMessage.edit(embed);
                 }
                 if (usersData.users.length === userCount) {
                     collector.stop();
                 }
             } else {
-                if (reaction.users.last() == message.author) {
-                    reaction.users.last().send("Nemůžeš hlasovat, protože jsi vytvořil anketu.");
-                } else {
-                    if (reaction.emoji == yes && usersData.users.find((user) => reaction.users.last().id === user.userId).vote === "no") {
-                        yescount++;
-                        nocount--;
-                        usersData.users.find((user) => reaction.users.last().id === user.userId).vote = "yes";
-                        reaction.users.last().send(`V anketě \`\`${question}\`\` jsi změnil svůj hlas na ano.`);
-                        embed.setFooter(`${usersData.users.length - 1}/${userCount} hlasovalo`).setTimestamp(new Date());
-                        questionMessage.edit(embed);
-                    } else if (reaction.emoji == no && usersData.users.find((user) => reaction.users.last().id === user.userId).vote === "yes") {
-                        nocount++;
-                        yescount--;
-                        usersData.users.find((user) => reaction.users.last().id === user.userId).vote = "no";
-                        reaction.users.last().send(`V anketě \`\`${question}\`\` jsi změnil svůj hlas na ne.`);
-                        embed.setFooter(`${usersData.users.length - 1}/${userCount} hlasovalo`).setTimestamp(new Date());
-                        questionMessage.edit(embed);
-                    }
+                if (reaction.emoji == yes && usersData.users.find((user) => reaction.users.last().id === user.userId).vote === "no") {
+                    yescount++;
+                    nocount--;
+                    usersData.users.find((user) => reaction.users.last().id === user.userId).vote = "yes";
+                    reaction.users.last().send(`V anketě \`\`${question}\`\` jsi změnil svůj hlas na ano.`);
+                    embed.setFooter(`${usersData.users.length}/${userCount} hlasovalo`).setTimestamp(new Date());
+                    questionMessage.edit(embed);
+                } else if (reaction.emoji == no && usersData.users.find((user) => reaction.users.last().id === user.userId).vote === "yes") {
+                    nocount++;
+                    yescount--;
+                    usersData.users.find((user) => reaction.users.last().id === user.userId).vote = "no";
+                    reaction.users.last().send(`V anketě \`\`${question}\`\` jsi změnil svůj hlas na ne.`);
+                    embed.setFooter(`${usersData.users.length}/${userCount} hlasovalo`).setTimestamp(new Date());
+                    questionMessage.edit(embed);
                 }
             }
 
