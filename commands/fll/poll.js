@@ -7,7 +7,7 @@ module.exports = class ReplyCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'poll',
-            aliases: ['anketa']
+            aliases: ['anketa'],
             group: 'fll',
             memberName: 'poll',
             description: 'Creates a poll. Please note: this command is under development',
