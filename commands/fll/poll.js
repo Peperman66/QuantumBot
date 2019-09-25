@@ -18,48 +18,19 @@ module.exports = class ReplyCommand extends Commando.Command {
                     type: 'string'
                    },
                    {
-                    key: 'answer1',
-                    prompt: 'What can users submit?',
+                    key: 'answers',
+                    prompt: 'What can users submit? Separate answers with \`\`|\`\`. Type with \`\`Ctrl+Alt+W\`\`.',
                     type: 'string',
-                    default: ''
-                   },
-                   {
-                    key: 'answer2',
-                    prompt: 'What can users submit?',
-                    type: 'string',
-                    default: ''
-                   },
-                   {
-                    key: 'answer3',
-                    prompt: 'What can users submit?',
-                    type: 'string',
-                    default: ''
-                   },
-                   {
-                    key: 'answer4',
-                    prompt: 'What can users submit?',
-                    type: 'string',
-                    default: ''
-                   },
-                   {
-                    key: 'answer5',
-                    prompt: 'What can users submit?',
-                    type: 'string',
-                    default: ''
-                   },
-                   {
-                    key: 'answer6',
-                    prompt: 'What can users submit?',
-                    type: 'string',
-                    default: ''
+                    default: '',
+                    parse: parse
                    }]
         });
     }
 
-    async run(message, {question, answer1, answer2, answer3, answer4, answer5, answer6}) {
+    async run(message, {question, answers}) {
         message.delete();
+        console.log(answers);
         const filter = (reaction, user) => !user.bot;
-        let answers = [answer1, answer2, answer3, answer4, answer5, answer6].map(e => e.trim()).filter(val => val != '');
         let mode;
         if (answers.length > 0) {
             mode = 'Other';
@@ -193,3 +164,9 @@ module.exports = class ReplyCommand extends Commando.Command {
     };
     
 };
+
+function parse(val, msg, arg) {
+    if (val === undefined) return null;
+    val = val.replace(/(\s*\|\s*)+/g, "|").replace(/(^\|)|(\|$)/g, "")
+    return val.split("|");
+}
