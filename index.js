@@ -39,4 +39,4 @@ const server = http.createServer((req, res) => {
         res.writeHead(200);
         res.end();
     }
-}).listen(80);
+}).listen(process.env.PORT);
