@@ -11,10 +11,10 @@ module.exports = class ReplyCommand extends Commando.Command {
             group: 'fll',
             memberName: 'poll',
             description: 'Creates a poll. Please note: this command is under development',
-            examples: ['poll Do you like cats?'],
+            examples: ['poll "Do you like cats?"', 'poll "What is 1+1?" 0 | 1 | 2'],
             args: [{
                     key: 'question',
-                    prompt: 'What question would you like to ask?',
+                    prompt: 'What question would you like to ask? The question has to be in quotation marks. (``" "``)',
                     type: 'string'
                    },
                    {
