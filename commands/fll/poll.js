@@ -54,11 +54,11 @@ module.exports = class ReplyCommand extends Commando.Command {
         const availableUsers = users.filter(u => message.channel.memberPermissions(u).has('VIEW_CHANNEL', false))
         const userCount = availableUsers.filter(u => !u.user.bot).size;
         let embed = new Discord.RichEmbed()
-            .setTitle("Nová anketa!")
+            .setTitle("New poll!")
             .setColor(config.embeds.infoColor)
             .setDescription(text)
-            .setFooter(`0/${userCount} hlasovalo`)
             .setTimestamp(new Date());
+            .setFooter(`0/${userCount} voted`)
         let questionMessage = await message.channel.send(embed)
         if (mode === 'YesNo') {
             questionMessage.react(yes)
@@ -86,8 +86,8 @@ module.exports = class ReplyCommand extends Commando.Command {
                             vote: "yes"
                         }
                         usersData.users.push(userData);
-                        reaction.users.last().send(`V anketě \`\`${question}\`\` jsi hlasoval pro ano.`);
-                        embed.setFooter(`${usersData.users.length}/${userCount} hlasovalo`).setTimestamp(new Date());
+                        reaction.users.last().send(`You voted for yes in the poll \`\`${question}\`\`.`);
+                        embed.setFooter(`${usersData.users.length}/${userCount} voted`)
                         questionMessage.edit(embed);
                     } else if (reaction.emoji == no) {
                         nocount++;
@@ -96,8 +96,8 @@ module.exports = class ReplyCommand extends Commando.Command {
                             vote: "no"
                         }
                         usersData.users.push(userData);
-                        reaction.users.last().send(`V anketě \`\`${question}\`\` jsi hlasoval pro ne.`);
-                        embed.setFooter(`${usersData.users.length}/${userCount} hlasovalo`).setTimestamp(new Date());
+                        reaction.users.last().send(`You voted for yes in the poll \`\`${question}\`\`.`);
+                        embed.setFooter(`${usersData.users.length}/${userCount} voted`)
                         questionMessage.edit(embed);
                     }
                     if (usersData.users.length === userCount) {
@@ -112,8 +112,8 @@ module.exports = class ReplyCommand extends Commando.Command {
                                 vote: i
                         }
                         usersData.users.push(userData);
-                        reaction.users.last().send(`V anketě \`\`${question}\`\` jsi hlasoval pro možnost \`\`${answers[i]}\`\`.`);
-                        embed.setFooter(`${usersData.users.length}/${userCount} hlasovalo`).setTimestamp(new Date());
+                            reaction.users.last().send(`You voted for \`\`${answers[i]}\`\` in the poll \`\`${question}\`\`.`);
+                        embed.setFooter(`${usersData.users.length}/${userCount} voted`)
                         questionMessage.edit(embed);
                         }
                     }
@@ -124,15 +124,15 @@ module.exports = class ReplyCommand extends Commando.Command {
                         yescount++;
                         nocount--;
                         usersData.users.find((user) => reaction.users.last().id === user.userId).vote = "yes";
-                        reaction.users.last().send(`V anketě \`\`${question}\`\` jsi změnil svůj hlas na ano.`);
-                        embed.setFooter(`${usersData.users.length}/${userCount} hlasovalo`).setTimestamp(new Date());
+                        reaction.users.last().send(`Your vote was changed to yes in the poll \`\`${question}\`\`.`);
+                        embed.setFooter(`${usersData.users.length}/${userCount} voted`)
                         questionMessage.edit(embed);
                     } else if (reaction.emoji == no && usersData.users.find((user) => reaction.users.last().id === user.userId).vote === "yes") {
                         nocount++;
                         yescount--;
                         usersData.users.find((user) => reaction.users.last().id === user.userId).vote = "no";
-                        reaction.users.last().send(`V anketě \`\`${question}\`\` jsi změnil svůj hlas na ne.`);
-                        embed.setFooter(`${usersData.users.length}/${userCount} hlasovalo`).setTimestamp(new Date());
+                        reaction.users.last().send(`Your vote was changed to no in the poll \`\`${question}\`\`.`);
+                        embed.setFooter(`${usersData.users.length}/${userCount} voted`)
                         questionMessage.edit(embed);
                     }
                 } else {
@@ -141,8 +141,8 @@ module.exports = class ReplyCommand extends Commando.Command {
                             answercount[i]++;
                             answercount[usersData.users.find((user) => reaction.users.last().id === user.userId).vote]--;
                             usersData.users.find((user) => reaction.users.last().id === user.userId).vote = i;
-                            reaction.users.last().send(`V anketě \`\`${question}\`\` jsi změnil svůj hlas pro možnost \`\`${answers[i]}\`\`.`);
-                            embed.setFooter(`${usersData.users.length}/${userCount} hlasovalo`).setTimestamp(new Date());
+                            reaction.users.last().send(`Your vote was changed to \`\`${answers[i]}\`\` in the poll \`\`${question}\`\`.`);
+                            embed.setFooter(`${usersData.users.length}/${userCount} voted`)
                             questionMessage.edit(embed);
                         };
                     };
@@ -156,9 +156,9 @@ module.exports = class ReplyCommand extends Commando.Command {
             console.log(`Collected ${collected.size} items`);
             questionMessage.delete();
             if (mode === "YesNo") {
-                message.channel.send(`Výsledky hlasování ankety \`\`${question}\`\`: ${yescount}x ano, ${nocount}x ne.`);
+                message.channel.send(`Results of the poll \`\`${question}\`\`: ${yescount}x yes, ${nocount}x no.`);
             } else {
-                let text = `Výsledky hlasování ankety \`\`${question}\`\`:`;
+                let text = `Results of the poll \`\`${question}\`\`:`;
                 for (let i = 0; i < answers.length; i++) {
                     text += ` ${answercount[i]}× \`\`${answers[i]}\`\``;
                 }
