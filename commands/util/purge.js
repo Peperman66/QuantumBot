@@ -7,6 +7,7 @@ module.exports = class ReplyCommand extends Commando.Command {
             name: 'purge',
             group: 'util',
             memberName: 'purge',
+            userPermissions: ['MANAGE_MESSAGES'],
             description: 'Removes messages from the channel',
             examples: ['purge 10'],
             args: [{
@@ -19,8 +20,12 @@ module.exports = class ReplyCommand extends Commando.Command {
     }
 
     run(message, {messages} ) {
-        message.channel.fetchMessages({ limit: (messages+1) })
-            .then(messages => message.channel.bulkDelete(messages));
+        if (messages > 10) {
+             return message.reply("You can't delete more than 10 messages at once.");
+        } else {
+            message.channel.fetchMessages({ limit: (messages+1) })
+                .then(messages => message.channel.bulkDelete(messages));
+        }
         
     }
 }
