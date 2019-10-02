@@ -10,15 +10,15 @@ module.exports = class ReplyCommand extends Commando.Command {
             description: 'Removes messages from the channel',
             examples: ['purge 10'],
             args: [{
-                key: 'number of messages',
-                label: 'messages',
+                key: 'messages',
+                label: 'number of messages',
                 prompt: 'How many messages do you want to remove?',
                 type: 'integer'
             }]
         });
     }
 
-    run(message, { messages }) {
+    run(message, {messages} ) {
         message.channel.fetchMessages({ limit: (messages+1) })
             .then(messages => message.channel.bulkDelete(messages));
         
