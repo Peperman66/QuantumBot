@@ -28,6 +28,7 @@ bot.registry
 
 bot.on('ready', () => {
     bot.user.setActivity(',help for help');
+    bot.channels.find('id', process.env.CHANNEL_ON_BOT_READY).send('Bot was restarted! If some polls were active, they might not work.');
 });
 
 bot.on('error', async error => console.log(error));
