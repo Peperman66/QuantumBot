@@ -11,11 +11,17 @@ module.exports = class ReplyCommand extends Commando.Command {
             group: 'fll',
             memberName: 'poll',
             description: 'Creates a poll. Please note: this command is under development',
-            examples: ['poll "Do you like cats?"', 'poll "What is 1+1?" 0 | 1 | 2'],
+            examples: ['poll "Do you like cats?" 10min', 'poll "What is 1+1?" 6h 0 | 1 | 2'],
             args: [{
                     key: 'question',
                     prompt: 'What question would you like to ask? The question has to be in quotation marks. (``" "``)',
                     type: 'string'
+                   },
+                   {
+                   key: 'time',
+                   prompt: 'How long do you want for the poll to exist? Default is 24h. Example: ``1min``, ``5h``',
+                   type: 'string',
+                   default: '24h'
                    },
                    {
                     key: 'answers',
@@ -27,7 +33,7 @@ module.exports = class ReplyCommand extends Commando.Command {
         });
     }
 
-    async run(message, {question, answers}) {
+    async run(message, {question, time, answers}) {
         message.delete();
         console.log(answers);
         const filter = (reaction, user) => !user.bot;
@@ -62,7 +68,7 @@ module.exports = class ReplyCommand extends Commando.Command {
                 await questionMessage.react(emoji[i])
             }
         }
-        const collector = questionMessage.createReactionCollector(filter, { time: ms('5min') });
+        const collector = questionMessage.createReactionCollector(filter, { time: ms(time) });
 
         let yescount = 0;
         let nocount = 0;
