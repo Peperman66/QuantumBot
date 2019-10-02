@@ -57,8 +57,8 @@ module.exports = class ReplyCommand extends Commando.Command {
             .setTitle("New poll!")
             .setColor(config.embeds.infoColor)
             .setDescription(text)
-            .setTimestamp(new Date());
             .setFooter(`0/${userCount} voted`)
+            .setTimestamp(new Date() + ms(time));
         let questionMessage = await message.channel.send(embed)
         if (mode === 'YesNo') {
             questionMessage.react(yes)
